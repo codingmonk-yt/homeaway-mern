@@ -1,17 +1,12 @@
 import React, { useState } from "react";
 import { IoHome } from "react-icons/io5";
-
-// import SimpleBar from "simplebar-react";
-// import "simplebar-react/dist/simplebar.min.css";
 import DatePickerOne from "./components/DatePicker";
 import { IoIosSearch } from "react-icons/io";
-import { RxHamburgerMenu } from "react-icons/rx";
 import {
   FaCity,
   FaFireAlt,
   FaRegSnowflake,
   FaUmbrellaBeach,
-  FaUserCircle,
 } from "react-icons/fa";
 import {
   PiBarn,
@@ -378,6 +373,12 @@ const PROPERTIES = [
 
 export default function App() {
   const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState(0);
+
+  const handleChangeCategory = (key) => {
+    setCategory(key);
+  };
+
   const handleToggle = () => {
     setOpen((prev) => !prev);
   };
@@ -386,13 +387,13 @@ export default function App() {
       <SimpleBar style={{ height: "100vh" }}>
         <div className="flex flex-col space-y-2">
           {/* Header */}
-          <div className="flex flex-row items-center justify-between px-6 py-6 border-b border-stroke">
+          <div className="grid grid-cols-3 items-center px-6 py-6 border-b border-stroke">
             <div className="flex flex-row items-center space-x-2">
               <IoHome size={24} className="text-primary" />
               <div className="font-semibold text-xl text-primary">HomeAway</div>
             </div>
 
-            <div className="py-4 px-4 border border-stroke rounded-full shadow-2 flex flex-row items-center space-x-3 divide-x-2 divide-stroke">
+            <div className="justify-self-center max-w-fit py-4 px-4 border border-stroke rounded-full shadow-2 flex flex-row items-center space-x-3 divide-x-2 divide-stroke">
               <DatePickerOne placeholder="Check in" />
               <DatePickerOne placeholder="Check out" />
 
@@ -401,17 +402,28 @@ export default function App() {
               </div>
             </div>
 
-        {/*  */}
-        <ProfileDropdown />
+            {/*  */}
+            <div className="justify-self-end">
+              <ProfileDropdown />
+            </div>
           </div>
           <div className="flex flex-col space-y-4 max-w-screen-xl mx-auto min-w">
             {/* Categories */}
             <SimpleBar style={{ maxWidth: "100%" }}>
-              <div className="flex flex-row items-center justify-between space-x-8 px-4 py-2 min-w-min">
+              <div
+                className={`flex flex-row items-center justify-between space-x-8 px-4 py-2 min-w-min`}
+              >
                 {CATEGORY.map(({ icon, key, label }) => (
                   <div
                     key={key}
-                    className="flex flex-col items-center space-y-2"
+                    className={`flex flex-col items-center space-y-2 hover:cursor-pointer ${
+                      category === key
+                        ? "text-primary underline font-semibold"
+                        : ""
+                    }`}
+                    onClick={() => {
+                      handleChangeCategory(key);
+                    }}
                   >
                     {icon}
                     <div className="text-xs text-nowrap">{label}</div>
@@ -424,12 +436,12 @@ export default function App() {
               {PROPERTIES.map(({ imgSrc, key, name, rating, price }) => (
                 <div
                   key={key}
-                  className="flex flex-col space-y-2 border border-stroke rounded-lg overflow-hidden shadow-md"
+                  className="flex flex-col space-y-2 border border-stroke rounded-lg overflow-hidden shadow-md hover:cursor-pointer"
                 >
                   <img
                     src={imgSrc}
                     alt={name}
-                    className="h-48 w-full object-cover"
+                    className="h-48 w-full object-cover hover:scale-105 transition-all"
                   />
                   <div className="flex flex-col p-4 space-y-3">
                     <div className="flex flex-row items-center justify-between">
